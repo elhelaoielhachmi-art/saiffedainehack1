@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي أنميشن المانجا</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .controls {
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #manga-container {
+            width: 80vw;
+            height: 60vh;
+            border: 5px solid #333;
+            overflow: hidden;
+            position: relative;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #manga-image {
+            max-width: none;
+            height: 100%;
+            transition: transform 5s ease-in-out;
+            display: none;
+        }
+
+        /* حركات الأنميشن */
+        .animate-zoom {
+            animation: kenBurns 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes kenBurns {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+            100% {
+                transform: scale(1.3) translate(-5%, -5%);
+            }
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h2>محول المانجا إلى "Motion Anime"</h2>
+        <p>اختر صفحة مانجا لتبدأ التحريك:</p>
+        <input type="file" id="imageInput" accept="image/*"><br>
+        <button onclick="startAnimation()">ابدأ الأنميشن</button>
+    </div>
+
+    <div id="manga-container">
+        <img id="manga-image" src="" alt="Manga Panel">
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const mangaImage = document.getElementById('manga-image');
+
+        imageInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    mangaImage.src = event.target.result;
+                    mangaImage.style.display = 'block';
+                    mangaImage.classList.remove('animate-zoom'); // إعادة تعيين الأنميشن
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+
+        function startAnimation() {
+            if (mangaImage.src) {
+                mangaImage.classList.add('animate-zoom');
+            } else {
+                alert("يرجى اختيار صورة أولاً!");
+            }
+        }
+    </script>
+</body>
+</html>
